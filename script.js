@@ -35,7 +35,7 @@ const PROFILE = {
   ],
   projects: [
     { emoji: "✨", title: "Gemini Center", sub: "Vai trò: CEO", desc: "Trung tâm nơi tôi dẫn dắt và cùng mọi người tìm hiểu, ứng dụng AI Gemini vào học tập và sáng tạo.", tags: ["AI", "Gemini", "Lãnh đạo"], link: "#" },
-    { emoji: "🌌", title: "Portfolio 3D", sub: "Dự án Vibe Coding", desc: "Trang web giới thiệu bản thân với hiệu ứng 3D, màn mở đầu xuyên không gian — được tạo hoàn toàn bằng Vibe Coding.", tags: ["Vibe Coding", "HTML", "3D"], link: "#" },
+    { emoji: "🌿", title: "Portfolio 3D", sub: "Dự án Vibe Coding", desc: "Trang web giới thiệu bản thân với hiệu ứng 3D thiên nhiên, cây ánh sáng và rừng đom đóm — được tạo hoàn toàn bằng Vibe Coding.", tags: ["Vibe Coding", "HTML", "3D"], link: "#" },
     { emoji: "📚", title: "Trợ lý học tập AI", sub: "Đang phát triển", desc: "Ý tưởng về một trợ lý AI giúp học sinh ôn bài, giải đáp thắc mắc và lên kế hoạch học tập.", tags: ["AI", "Giáo dục"], link: "#" },
     { emoji: "🎮", title: "Game mini bằng AI", sub: "Sắp ra mắt", desc: "Thử thách tự tạo một trò chơi nhỏ chạy trên trình duyệt chỉ bằng cách trò chuyện với AI.", tags: ["Vibe Coding", "Game"], link: "#" },
   ],
@@ -68,7 +68,7 @@ $("#logo").textContent = PROFILE.initials;
 $("#heroName").textContent = PROFILE.name;
 $("#heroIntro").textContent = PROFILE.intro;
 $("#aboutText").textContent = PROFILE.about;
-$("#footerText").textContent = `© ${new Date().getFullYear()} ${PROFILE.name} · Thiết kế với ❤️ và một chút phép thuật 3D`;
+$("#footerText").textContent = `© ${new Date().getFullYear()} ${PROFILE.name} · Thiết kế với 🌿 và một chút phép thuật 3D`;
 
 const avatarEl = $("#avatar");
 if (PROFILE.avatar) {
@@ -161,7 +161,7 @@ $("#contactInfo").innerHTML = `
   <div class="socials">${C.socials.map((s) => `<a class="social" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join("")}</div>`;
 
 /* =========================================================
-   NỀN 3D: QUẢ CẦU HẠT + VÀNH ĐAI + SAO BAY
+   NỀN 3D THIÊN NHIÊN: ĐỒI NÚI 3D + CÂY ÁNH SÁNG + LÁ BAY + ĐOM ĐÓM
    ========================================================= */
 const canvas = $("#bg3d");
 const ctx = canvas.getContext("2d");
@@ -181,23 +181,155 @@ resize();
 window.addEventListener("resize", resize);
 
 const isMobile = window.innerWidth < 800;
-const GLOBE_N = isMobile ? 450 : 850;
-const globe = [];
-for (let i = 0; i < GLOBE_N; i++) {
-  const y = 1 - (i / (GLOBE_N - 1)) * 2;
-  const r = Math.sqrt(1 - y * y);
-  const th = i * Math.PI * (3 - Math.sqrt(5));
-  globe.push({ x: Math.cos(th) * r, y, z: Math.sin(th) * r, hue: 190 + (y + 1) * 70 });
+
+// Bộ sinh số ngẫu nhiên cố định để Cây 3D luôn có dáng đẹp cân đối
+let seed = 25032011;
+function rand() {
+  seed = (seed * 1664525 + 1013904223) >>> 0;
+  return seed / 4294967296;
 }
 
-const ring = [];
-for (let i = 0; i < (isMobile ? 140 : 260); i++) {
-  ring.push({ a: Math.random() * Math.PI * 2, rad: 1.45 + Math.random() * 0.4, y: (Math.random() - 0.5) * 0.08, s: 0.0015 + Math.random() * 0.003 });
+/* ---------- 1. Cây Ánh Sáng 3D (thân cành đệ quy + tán lá hạt + đồi rêu) ---------- */
+const branches = [];
+const canopy = [];
+
+function addBranch(x, y, z, dx, dy, dz, len, depth) {
+  const x2 = x + dx * len;
+  const y2 = y + dy * len;
+  const z2 = z + dz * len;
+  branches.push({ x1: x, y1: y, z1: z, x2, y2, z2, depth });
+
+  if (depth === 0) {
+    // Tán lá phát sáng ở đầu cành
+    const count = isMobile ? 11 : 18;
+    for (let i = 0; i < count; i++) {
+      const a = rand() * Math.PI * 2;
+      const u = rand() * 2 - 1;
+      const r = 0.08 + rand() * 0.28;
+      const sr = Math.sqrt(1 - u * u);
+      const isGold = rand() < 0.16;
+      canopy.push({
+        x: x2 + Math.cos(a) * sr * r * 1.3,
+        y: y2 + u * r * 0.78 + 0.05,
+        z: z2 + Math.sin(a) * sr * r * 1.3,
+        hue: isGold ? 44 + rand() * 14 : 122 + rand() * 48,
+        light: isGold ? 74 : 58 + rand() * 18,
+        size: isGold ? 2.4 : 1.7 + rand() * 1.8,
+        phase: rand() * Math.PI * 2,
+        gold: isGold,
+      });
+    }
+    // Dây liễu phát sáng rủ nhẹ dưới tán
+    for (let k = 1; k <= 3; k++) {
+      canopy.push({
+        x: x2 + (rand() - 0.5) * 0.12,
+        y: y2 - k * 0.095,
+        z: z2 + (rand() - 0.5) * 0.12,
+        hue: 155 + rand() * 25,
+        light: 72,
+        size: 1.5 - k * 0.25,
+        phase: rand() * Math.PI * 2,
+        gold: k === 3,
+      });
+    }
+    return;
+  }
+
+  const children = depth >= 2 ? 3 : 2;
+  const baseAngle = rand() * Math.PI * 2;
+  for (let i = 0; i < children; i++) {
+    const az = baseAngle + (i * Math.PI * 2) / children + (rand() - 0.5) * 0.55;
+    const spread = depth === 3 ? 0.52 + rand() * 0.18 : 0.45 + rand() * 0.22;
+    let ndx = dx * 0.55 + Math.cos(az) * spread;
+    let ndy = Math.max(0.28, dy * 0.78 + 0.18 + (rand() - 0.5) * 0.16);
+    let ndz = dz * 0.55 + Math.sin(az) * spread;
+    const norm = Math.hypot(ndx, ndy, ndz);
+    addBranch(x2, y2, z2, ndx / norm, ndy / norm, ndz / norm, len * (0.68 + rand() * 0.12), depth - 1);
+  }
 }
 
-const stars = [];
-for (let i = 0; i < (isMobile ? 160 : 320); i++) {
-  stars.push({ x: (Math.random() - 0.5) * 2400, y: (Math.random() - 0.5) * 2400, z: Math.random() * 2000 });
+// Khởi tạo thân chính từ gốc (y = -0.95) vươn lên
+addBranch(0, -0.95, 0, 0, 1, 0, 0.54, 3);
+
+// Đồi rêu nổi 3D dưới gốc cây
+const mound = [];
+const MOUND_N = isMobile ? 80 : 140;
+for (let i = 0; i < MOUND_N; i++) {
+  const a = rand() * Math.PI * 2;
+  const rad = Math.sqrt(rand()) * 0.72;
+  mound.push({
+    x: Math.cos(a) * rad,
+    y: -0.95 - rad * rad * 0.42 + (rand() - 0.5) * 0.04,
+    z: Math.sin(a) * rad,
+    hue: 135 + rand() * 32,
+    size: 1.3 + rand() * 1.4,
+  });
+}
+
+// Đom đóm bay quanh tán cây
+const treeOrbit = [];
+for (let i = 0; i < (isMobile ? 22 : 42); i++) {
+  treeOrbit.push({
+    a: rand() * Math.PI * 2,
+    rad: 0.55 + rand() * 0.85,
+    y: -0.5 + rand() * 1.65,
+    speed: (0.002 + rand() * 0.004) * (rand() < 0.5 ? 1 : -1),
+    bob: rand() * Math.PI * 2,
+  });
+}
+
+/* ---------- 2. Đom đóm 3D bay khắp màn hình ---------- */
+const fireflies = [];
+const FF_N = isMobile ? 40 : 80;
+for (let i = 0; i < FF_N; i++) {
+  fireflies.push({
+    x: (Math.random() - 0.5) * 2000,
+    y: (Math.random() - 0.5) * 1200,
+    z: 180 + Math.random() * 1400,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: -0.15 - Math.random() * 0.35,
+    phase: Math.random() * Math.PI * 2,
+    pulseSpeed: 0.002 + Math.random() * 0.003,
+    hue: Math.random() < 0.65 ? 50 + Math.random() * 18 : 138 + Math.random() * 28,
+  });
+}
+
+/* ---------- 3. Lá bay xoay 3D theo gió ---------- */
+const leaves = [];
+const LEAF_N = isMobile ? 20 : 38;
+function resetLeaf(l, randomY) {
+  l.x = (Math.random() - 0.5) * 2200;
+  l.y = randomY ? (Math.random() - 0.5) * 1400 : -800 - Math.random() * 300;
+  l.z = 220 + Math.random() * 1300;
+  l.vy = 0.55 + Math.random() * 0.9;
+  l.vx = 0.3 + Math.random() * 0.6;
+  l.rx = Math.random() * Math.PI * 2;
+  l.ry = Math.random() * Math.PI * 2;
+  l.rz = Math.random() * Math.PI * 2;
+  l.vrx = (Math.random() - 0.5) * 0.035;
+  l.vry = (Math.random() - 0.5) * 0.035;
+  l.vrz = (Math.random() - 0.5) * 0.02;
+  l.size = 9 + Math.random() * 10;
+  l.hue = Math.random() < 0.18 ? 44 + Math.random() * 12 : 118 + Math.random() * 44;
+  l.phase = Math.random() * Math.PI * 2;
+  return l;
+}
+for (let i = 0; i < LEAF_N; i++) leaves.push(resetLeaf({}, true));
+
+/* ---------- 4. Sao đêm nhẹ trên đỉnh bầu trời ---------- */
+const skyStars = [];
+for (let i = 0; i < (isMobile ? 45 : 90); i++) {
+  skyStars.push({ x: Math.random(), y: Math.random() * 0.52, r: 0.6 + Math.random() * 1.4, p: Math.random() * Math.PI * 2 });
+}
+
+/* ---------- Hàm địa hình đồi núi 3D ---------- */
+function hillHeight(x, z) {
+  const ridge = Math.sin(x * 0.42 + z * 0.35) * 0.55
+    + Math.cos(x * 0.24 - z * 0.52) * 0.48
+    + Math.sin(x * 0.85 + z * 0.7) * 0.18;
+  // Hai bên cao như thung lũng núi, giữa thoai thoải để dễ đọc chữ
+  const valley = Math.min(1.4, Math.abs(x) * 0.11);
+  return ridge + valley;
 }
 
 let mx = 0, my = 0, smx = 0, smy = 0;
@@ -209,10 +341,9 @@ window.addEventListener("pointermove", (e) => {
   g.style.top = e.clientY + "px";
 });
 
-function rotate(p, ax, ay) {
-  // Xoay quanh trục Y rồi trục X
+function rotate3D(p, ax, ay) {
   const cy = Math.cos(ay), sy = Math.sin(ay);
-  let x = p.x * cy + p.z * sy;
+  const x = p.x * cy + p.z * sy;
   let z = -p.x * sy + p.z * cy;
   const cx = Math.cos(ax), sx = Math.sin(ax);
   const y = p.y * cx - z * sx;
@@ -220,72 +351,231 @@ function rotate(p, ax, ay) {
   return { x, y, z };
 }
 
-let lastScroll = 0, scrollBoost = 0;
+function drawLeaf3D(x, y, size, rx, ry, rz, hue, alpha) {
+  const sx = Math.max(0.22, Math.abs(Math.cos(rx)));
+  const sy = Math.max(0.22, Math.abs(Math.cos(ry)));
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rz);
+  ctx.scale(sx, sy);
+  ctx.beginPath();
+  ctx.moveTo(0, -size);
+  ctx.quadraticCurveTo(size * 0.68, -size * 0.2, 0, size);
+  ctx.quadraticCurveTo(-size * 0.68, -size * 0.2, 0, -size);
+  ctx.fillStyle = `hsla(${hue}, 78%, 62%, ${alpha})`;
+  ctx.fill();
+  ctx.strokeStyle = `hsla(${hue + 10}, 95%, 80%, ${alpha * 0.7})`;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(0, -size * 0.85);
+  ctx.lineTo(0, size * 0.85);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function frame(t) {
   ctx.clearRect(0, 0, W, H);
   smx += (mx - smx) * 0.05;
   smy += (my - smy) * 0.05;
 
   const sc = window.scrollY;
-  scrollBoost += (Math.abs(sc - lastScroll) - scrollBoost) * 0.1;
-  lastScroll = sc;
   const progress = Math.min(sc / H, 3);
 
-  // --- Sao bay về phía người xem ---
-  const fov = 380;
-  const speed = 1.6 + scrollBoost * 0.6;
-  for (const s of stars) {
-    s.z -= speed;
-    if (s.z < 1) { s.z = 2000; s.x = (Math.random() - 0.5) * 2400; s.y = (Math.random() - 0.5) * 2400; }
-    const k = fov / s.z;
-    const sx = W / 2 + (s.x - smx * 120) * k;
-    const sy = H / 2 + (s.y - smy * 120) * k;
-    if (sx < 0 || sx > W || sy < 0 || sy > H) continue;
-    const a = Math.max(0, 1 - s.z / 2000);
-    ctx.fillStyle = `rgba(200,220,255,${a * 0.9})`;
-    const size = a * 2.2;
-    ctx.fillRect(sx, sy, size, size);
-  }
-
-  // --- Quả cầu hạt 3D ---
-  const R = Math.min(W, H) * (isMobile ? 0.34 : 0.3) * (1 + progress * 0.15);
-  const cx = isMobile ? W / 2 : W * 0.72 - progress * W * 0.22;
-  const cy = H * 0.5 + (isMobile ? -H * 0.05 : 0);
-  const alphaG = Math.max(isMobile ? 0.18 : 0.28, (isMobile ? 0.55 : 1) - progress * 0.45);
-  const ay = t * 0.00018 + smx * 0.7 + sc * 0.0015;
-  const ax = 0.35 + smy * 0.45;
-
-  for (const p of globe) {
-    const r = rotate(p, ax, ay);
-    const persp = 3 / (3 - r.z);
-    const sx = cx + r.x * R * persp;
-    const sy = cy + r.y * R * persp;
-    const a = ((r.z + 1.3) / 2.3) * alphaG;
-    const size = (r.z > 0 ? 1.9 : 1.1) * persp;
-    ctx.fillStyle = `hsla(${p.hue},100%,65%,${a})`;
+  // --- A. Sao nhẹ + Cực quang sương xanh trên nền trời ---
+  for (const s of skyStars) {
+    const tw = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(t * 0.0018 + s.p));
+    ctx.fillStyle = `rgba(215, 255, 232, ${tw * 0.55})`;
     ctx.beginPath();
-    ctx.arc(sx, sy, size, 0, Math.PI * 2);
+    ctx.arc(s.x * W - smx * 16, s.y * H - smy * 10, s.r, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // --- Vành đai quay quanh quả cầu ---
-  const tilt = 1.15;
-  for (const q of ring) {
-    q.a += q.s;
-    let p = { x: Math.cos(q.a) * q.rad, y: q.y, z: Math.sin(q.a) * q.rad };
-    // nghiêng vành đai
-    const y2 = p.y * Math.cos(tilt) - p.z * Math.sin(tilt);
-    const z2 = p.y * Math.sin(tilt) + p.z * Math.cos(tilt);
-    p = { x: p.x * Math.cos(0.35) - y2 * Math.sin(0.35), y: p.x * Math.sin(0.35) + y2 * Math.cos(0.35), z: z2 };
-    const r = rotate(p, ax * 0.5, smx * 0.5);
-    const persp = 3 / (3 - r.z);
-    const sx = cx + r.x * R * persp;
-    const sy = cy + r.y * R * persp;
-    const a = ((r.z + 2) / 4) * alphaG;
-    ctx.fillStyle = `rgba(255,${120 + Math.floor(r.z * 40)},220,${a})`;
+  // Dải sương cực quang mềm mại
+  const auroraY = H * 0.22 - smy * 18;
+  const ag = ctx.createRadialGradient(W * 0.68 - smx * 40, auroraY, 20, W * 0.68, auroraY, Math.max(W, H) * 0.55);
+  ag.addColorStop(0, "rgba(45, 212, 191, 0.11)");
+  ag.addColorStop(0.5, "rgba(74, 222, 128, 0.05)");
+  ag.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.fillStyle = ag;
+  ctx.fillRect(0, 0, W, H);
+
+  // --- B. Địa hình núi đồi 3D lướt nhẹ theo cuộn trang & chuột ---
+  const COLS = isMobile ? 20 : 34;
+  const ROWS = isMobile ? 12 : 18;
+  const fovT = Math.min(W, H) * 0.82;
+  const phaseZ = t * 0.00045 + sc * 0.0022;
+  const camX = smx * 1.5;
+  const camY = 2.65 - smy * 0.45;
+  const horizonY = H * 0.58;
+
+  for (let iz = ROWS - 1; iz >= 0; iz--) {
+    const z = 1.6 + iz * 0.52;
+    const scale = fovT / z;
+    const depthFade = 1 - iz / ROWS; // 0 ở xa, 1 ở gần
+    const pts = [];
+
+    for (let ix = 0; ix <= COLS; ix++) {
+      const wx = (ix - COLS / 2) * 0.85;
+      const wy = hillHeight(wx, z + phaseZ);
+      pts.push({
+        x: W / 2 + (wx - camX) * scale,
+        y: horizonY + (camY - wy) * scale,
+      });
+    }
+
+    // Đổ bóng núi sương mờ tạo chiều sâu 3D
     ctx.beginPath();
-    ctx.arc(sx, sy, 1.3 * persp, 0, Math.PI * 2);
+    ctx.moveTo(pts[0].x, H + 20);
+    for (let i = 0; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.lineTo(pts[pts.length - 1].x, H + 20);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(4, ${Math.floor(19 + depthFade * 14)}, ${Math.floor(15 + depthFade * 10)}, ${0.26 + depthFade * 0.28})`;
     ctx.fill();
+
+    // Đường đồng mức phát sáng mềm trên sườn núi
+    ctx.beginPath();
+    for (let i = 0; i < pts.length; i++) {
+      if (i === 0) ctx.moveTo(pts[i].x, pts[i].y);
+      else ctx.lineTo(pts[i].x, pts[i].y);
+    }
+    const lineAlpha = Math.sin(depthFade * Math.PI) * 0.34;
+    ctx.strokeStyle = `hsla(${150 + depthFade * 22}, 75%, 56%, ${lineAlpha})`;
+    ctx.lineWidth = 0.8 + depthFade * 0.9;
+    ctx.stroke();
+  }
+
+  // --- C. Cây Ánh Sáng 3D (xoay & đung đưa theo gió) ---
+  const treeAlpha = Math.max(isMobile ? 0.16 : 0.24, (isMobile ? 0.55 : 0.98) - progress * 0.45);
+  const R = Math.min(W, H) * (isMobile ? 0.34 : 0.34) * (1 + progress * 0.12);
+  const cx = isMobile ? W * 0.5 : W * 0.74 - progress * W * 0.18;
+  const cy = H * 0.54 + (isMobile ? -H * 0.02 : 0);
+  const ay = t * 0.00022 + smx * 0.65 + sc * 0.0014;
+  const ax = 0.18 + smy * 0.28;
+
+  // Vầng sáng ấm phía sau tán cây
+  const tg = ctx.createRadialGradient(cx, cy - R * 0.25, R * 0.05, cx, cy - R * 0.15, R * 1.15);
+  tg.addColorStop(0, `rgba(74, 222, 128, ${0.14 * treeAlpha})`);
+  tg.addColorStop(0.5, `rgba(45, 212, 191, ${0.06 * treeAlpha})`);
+  tg.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = tg;
+  ctx.beginPath();
+  ctx.arc(cx, cy - R * 0.15, R * 1.15, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Đồi rêu 3D dưới gốc
+  for (const m of mound) {
+    const r = rotate3D(m, ax, ay);
+    const persp = 3.2 / (3.2 - r.z);
+    const sx = cx + r.x * R * persp;
+    const sy = cy - r.y * R * persp;
+    const a = ((r.z + 1.4) / 2.4) * treeAlpha * 0.7;
+    ctx.fillStyle = `hsla(${m.hue}, 70%, 52%, ${a})`;
+    ctx.beginPath();
+    ctx.arc(sx, sy, m.size * persp, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Thân và cành cây 3D
+  ctx.lineCap = "round";
+  for (const b of branches) {
+    const r1 = rotate3D({ x: b.x1, y: b.y1, z: b.z1 }, ax, ay);
+    const r2 = rotate3D({ x: b.x2, y: b.y2, z: b.z2 }, ax, ay);
+    const p1 = 3.2 / (3.2 - r1.z);
+    const p2 = 3.2 / (3.2 - r2.z);
+    const mz = (r1.z + r2.z) * 0.5;
+    const a = Math.max(0.15, ((mz + 1.4) / 2.4)) * treeAlpha * 0.85;
+    ctx.strokeStyle = `rgba(118, 198, 155, ${a * 0.72})`;
+    ctx.lineWidth = (b.depth * 2.1 + 1.2) * ((p1 + p2) * 0.5);
+    ctx.beginPath();
+    ctx.moveTo(cx + r1.x * R * p1, cy - r1.y * R * p1);
+    ctx.lineTo(cx + r2.x * R * p2, cy - r2.y * R * p2);
+    ctx.stroke();
+  }
+
+  // Tán lá phát sáng 3D đung đưa nhẹ theo gió
+  for (const p of canopy) {
+    const sway = Math.sin(t * 0.0016 + p.phase) * 0.028;
+    const r = rotate3D({ x: p.x + sway, y: p.y + sway * 0.5, z: p.z }, ax, ay);
+    const persp = 3.2 / (3.2 - r.z);
+    const sx = cx + r.x * R * persp;
+    const sy = cy - r.y * R * persp;
+    const twinkle = p.gold ? 0.65 + 0.35 * Math.sin(t * 0.004 + p.phase) : 1;
+    const a = Math.max(0.08, ((r.z + 1.4) / 2.4)) * treeAlpha * twinkle;
+    ctx.fillStyle = `hsla(${p.hue}, 88%, ${p.light}%, ${a})`;
+    ctx.beginPath();
+    ctx.arc(sx, sy, p.size * persp, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Đom đóm bay quanh tán cây
+  for (const q of treeOrbit) {
+    q.a += q.speed;
+    const p = {
+      x: Math.cos(q.a) * q.rad,
+      y: q.y + Math.sin(t * 0.002 + q.bob) * 0.08,
+      z: Math.sin(q.a) * q.rad,
+    };
+    const r = rotate3D(p, ax * 0.8, ay * 0.3);
+    const persp = 3.2 / (3.2 - r.z);
+    const sx = cx + r.x * R * persp;
+    const sy = cy - r.y * R * persp;
+    const pulse = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(t * 0.0045 + q.bob));
+    const a = Math.max(0.1, (r.z + 1.6) / 2.6) * treeAlpha * pulse;
+    const radG = 7 * persp;
+    const fg = ctx.createRadialGradient(sx, sy, 0, sx, sy, radG);
+    fg.addColorStop(0, `rgba(254, 240, 138, ${a})`);
+    fg.addColorStop(1, "rgba(250, 204, 21, 0)");
+    ctx.fillStyle = fg;
+    ctx.beginPath();
+    ctx.arc(sx, sy, radG, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // --- D. Đom đóm 3D bay lơ lửng toàn khung hình ---
+  const fovP = 420;
+  for (const f of fireflies) {
+    f.x += f.vx + Math.sin(t * 0.001 + f.phase) * 0.45 + smx * 0.35;
+    f.y += f.vy + Math.cos(t * 0.0012 + f.phase) * 0.25;
+    f.z += Math.sin(t * 0.0008 + f.phase) * 0.8;
+    if (f.y < -700) f.y = 700;
+    if (f.x < -1100) f.x = 1100;
+    if (f.x > 1100) f.x = -1100;
+
+    const k = fovP / f.z;
+    const sx = W / 2 + (f.x - smx * 110) * k;
+    const sy = H / 2 + (f.y - smy * 90) * k;
+    if (sx < -30 || sx > W + 30 || sy < -30 || sy > H + 30) continue;
+
+    const pulse = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * f.pulseSpeed + f.phase));
+    const depthA = Math.max(0.15, 1 - f.z / 1650);
+    const glowR = (5 + depthA * 9) * pulse;
+    const fg = ctx.createRadialGradient(sx, sy, 0, sx, sy, glowR);
+    fg.addColorStop(0, `hsla(${f.hue}, 100%, 82%, ${depthA * pulse * 0.95})`);
+    fg.addColorStop(0.45, `hsla(${f.hue}, 95%, 60%, ${depthA * pulse * 0.35})`);
+    fg.addColorStop(1, `hsla(${f.hue}, 95%, 55%, 0)`);
+    ctx.fillStyle = fg;
+    ctx.beginPath();
+    ctx.arc(sx, sy, glowR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // --- E. Lá bay xoay 3D theo làn gió ---
+  for (const l of leaves) {
+    l.x += l.vx + Math.sin(t * 0.0012 + l.phase) * 0.9 + smx * 0.8;
+    l.y += l.vy;
+    l.z -= 0.45;
+    l.rx += l.vrx;
+    l.ry += l.vry;
+    l.rz += l.vrz;
+    if (l.y > 850 || l.z < 120) resetLeaf(l, false);
+
+    const k = fovP / l.z;
+    const sx = W / 2 + (l.x - smx * 130) * k;
+    const sy = H / 2 + (l.y - smy * 90) * k;
+    if (sx < -40 || sx > W + 40 || sy < -40 || sy > H + 40) continue;
+
+    const alpha = Math.min(0.85, (1 - l.z / 1600) * 0.9);
+    drawLeaf3D(sx, sy, l.size * k, l.rx, l.ry, l.rz, l.hue, alpha);
   }
 
   // --- Parallax 3D cho nội dung hero ---
@@ -353,7 +643,6 @@ document.querySelectorAll("[data-tilt]").forEach((el) => {
   stage.addEventListener("pointercancel", stop);
   (function loop() {
     if (!dragging) {
-      // giảm dần về tốc độ tự xoay mặc định
       vx += (0.15 - vx) * 0.03;
       vy += (0.35 - vy) * 0.03;
     }
