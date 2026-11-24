@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Huỳnh Phúc Khánh Lộc | Giới thiệu bản thân</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="locked">
+  <!-- ===== MÀN HÌNH MỞ ĐẦU ===== -->
+  <div id="intro">
+    <canvas id="introCanvas"></canvas>
+    <div class="intro-center">
+      <div class="gyro">
+        <div class="g-ring g1"></div>
+        <div class="g-ring g2"></div>
+        <div class="g-ring g3"></div>
+        <div class="g-core" id="introInitials">KL</div>
+      </div>
+      <p class="intro-welcome">Chào mừng đến với thế giới của</p>
+      <h1 class="intro-name" id="introName"></h1>
+      <div class="intro-loader" id="introLoader">
+        <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+        <span id="loaderText">Đang khởi tạo vũ trụ... 0%</span>
+      </div>
+      <button class="intro-btn" id="introBtn"><span>✦ Bấm để khám phá ✦</span></button>
+      <p class="intro-hint">hoặc nhấn <kbd>Enter</kbd></p>
+    </div>
+    <button class="sound-toggle" id="soundToggle" aria-label="Bật/tắt âm thanh">🔊 Âm thanh: Bật</button>
+    <div class="intro-flash"></div>
+  </div>
+
+  <!-- Nền 3D -->
+  <canvas id="bg3d"></canvas>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Thanh điều hướng -->
+  <header class="nav" id="nav">
+    <a href="#home" class="logo" id="logo">KL</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">Giới thiệu</a>
+      <a href="#skills">Kỹ năng</a>
+      <a href="#projects">Dự án</a>
+      <a href="#journey">Hành trình</a>
+      <a href="#contact">Liên hệ</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Mở menu"><span></span><span></span></button>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="hero-content" id="heroContent">
+        <p class="hello">👋 Xin chào, tôi là</p>
+        <h1 class="hero-name" id="heroName"></h1>
+        <h2 class="hero-role"><span id="typing"></span><span class="caret">|</span></h2>
+        <p class="hero-intro" id="heroIntro"></p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn btn-primary">Xem dự án</a>
+          <a href="#contact" class="btn btn-ghost">Liên hệ ngay</a>
+        </div>
+      </div>
+      <a href="#about" class="scroll-hint" aria-label="Cuộn xuống"><span></span></a>
+    </section>
+
+    <!-- VỀ TÔI -->
+    <section id="about" class="section">
+      <h2 class="section-title reveal"><span>01.</span> Về tôi</h2>
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="avatar-card" data-tilt>
+            <div class="avatar-inner">
+              <div class="avatar-ring"></div>
+              <div class="avatar-ring r2"></div>
+              <div class="avatar" id="avatar"></div>
+            </div>
+            <div class="glare"></div>
+          </div>
+        </div>
+        <div class="about-text reveal">
+          <p id="aboutText"></p>
+          <div class="stats" id="stats"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KỸ NĂNG -->
+    <section id="skills" class="section">
+      <h2 class="section-title reveal"><span>02.</span> Kỹ năng</h2>
+      <div class="skills-grid">
+        <div class="cube-wrap reveal">
+          <div class="cube-stage">
+            <div class="cube" id="cube"></div>
+          </div>
+          <p class="cube-hint">🖱️ Kéo để xoay khối 3D</p>
+        </div>
+        <div class="skill-bars reveal" id="skillBars"></div>
+      </div>
+    </section>
+
+    <!-- DỰ ÁN -->
+    <section id="projects" class="section">
+      <h2 class="section-title reveal"><span>03.</span> Dự án nổi bật</h2>
+      <div class="projects-grid" id="projectGrid"></div>
+    </section>
+
+    <!-- HÀNH TRÌNH -->
+    <section id="journey" class="section">
+      <h2 class="section-title reveal"><span>04.</span> Hành trình</h2>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <!-- LIÊN HỆ -->
+    <section id="contact" class="section">
+      <h2 class="section-title reveal"><span>05.</span> Liên hệ</h2>
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="contact-info glass" data-tilt>
+            <div class="contact-inner" id="contactInfo"></div>
+            <div class="glare"></div>
+          </div>
+        </div>
+        <form class="contact-form glass reveal" id="contactForm">
+          <h3>Gửi lời nhắn cho tôi ✉️</h3>
+          <input type="text" id="fName" placeholder="Tên của bạn" required />
+          <input type="email" id="fEmail" placeholder="Email của bạn" required />
+          <textarea id="fMsg" rows="5" placeholder="Nội dung tin nhắn..." required></textarea>
+          <button type="submit" class="btn btn-primary">Gửi tin nhắn 🚀</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p id="footerText"></p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="intro.js"></script>
+</body>
+</html>
