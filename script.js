@@ -46,14 +46,13 @@ const PROFILE = {
     { time: "25/03/2011", title: "Ngày tôi chào đời 🎂", place: "Khởi đầu hành trình", desc: "Ngày đặc biệt nhất — điểm bắt đầu của mọi câu chuyện." },
   ],
   contact: {
-    email: "email.cua.ban@gmail.com",
-    phone: "0123 456 789",
-    location: "Hà Nội, Việt Nam",
+    email: "klocevin@gmail.com",
+    phone: "0941 144 975",
+    location: "", // Điền tỉnh/thành nếu muốn hiển thị, để trống sẽ ẩn
     socials: [
-      { name: "📘 Facebook", url: "https://facebook.com" },
-      { name: "🐙 GitHub", url: "https://github.com" },
-      { name: "💼 LinkedIn", url: "https://linkedin.com" },
-      { name: "📸 Instagram", url: "https://instagram.com" },
+      { name: "💬 Zalo", url: "https://zalo.me/0941144975" },
+      { name: "🐙 GitHub", url: "https://github.com/klocevin-ai" },
+      { name: "📧 Gmail", url: "mailto:klocevin@gmail.com" },
     ],
   },
 };
@@ -158,7 +157,7 @@ $("#contactInfo").innerHTML = `
   <p>Tôi luôn sẵn sàng cho những cơ hội hợp tác, dự án mới hoặc đơn giản là một cuộc trò chuyện thú vị.</p>
   <div class="c-row"><div class="c-icon">📧</div><div><small>Email</small><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></div></div>
   <div class="c-row"><div class="c-icon">📞</div><div><small>Điện thoại</small><a href="tel:${esc(C.phone.replace(/\s/g, ""))}">${esc(C.phone)}</a></div></div>
-  <div class="c-row"><div class="c-icon">📍</div><div><small>Địa chỉ</small>${esc(C.location)}</div></div>
+  ${C.location ? `<div class="c-row"><div class="c-icon">📍</div><div><small>Địa chỉ</small>${esc(C.location)}</div></div>` : ""}
   <div class="socials">${C.socials.map((s) => `<a class="social" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join("")}</div>`;
 
 /* =========================================================
