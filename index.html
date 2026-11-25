@@ -43,6 +43,7 @@
     <nav class="nav-links" id="navLinks">
       <a href="#about">Giới thiệu</a>
       <a href="#skills">Kỹ năng</a>
+      <a href="#ai">Kho AI</a>
       <a href="#projects">Dự án</a>
       <a href="#journey">Hành trình</a>
       <a href="#contact">Liên hệ</a>
@@ -101,21 +102,34 @@
       </div>
     </section>
 
+    <!-- KHO AI -->
+    <section id="ai" class="section">
+      <h2 class="section-title reveal"><span>03.</span> Kho AI hỗ trợ</h2>
+      <p class="ai-intro reveal">🤖 Tổng hợp các công cụ AI hay nhất cho mọi việc: trò chuyện, lập trình, tạo ảnh, video, âm nhạc, học tập và văn phòng. Bấm vào thẻ để mở AI đó.</p>
+      <div class="ai-toolbar reveal">
+        <div class="ai-tabs" id="aiTabs"></div>
+        <input type="search" id="aiSearch" class="ai-search" placeholder="🔍 Tìm AI (vd: ảnh, code, Gemini...)" />
+      </div>
+      <div class="ai-grid" id="aiGrid"></div>
+      <p class="ai-empty" id="aiEmpty" hidden>🍃 Không tìm thấy AI phù hợp. Thử từ khóa khác nhé!</p>
+      <p class="ai-note">💡 Mỗi AI có giới hạn độ tuổi và gói miễn phí/trả phí riêng, hãy đọc kỹ điều khoản trước khi dùng.</p>
+    </section>
+
     <!-- DỰ ÁN -->
     <section id="projects" class="section">
-      <h2 class="section-title reveal"><span>03.</span> Dự án nổi bật</h2>
+      <h2 class="section-title reveal"><span>04.</span> Dự án nổi bật</h2>
       <div class="projects-grid" id="projectGrid"></div>
     </section>
 
     <!-- HÀNH TRÌNH -->
     <section id="journey" class="section">
-      <h2 class="section-title reveal"><span>04.</span> Hành trình</h2>
+      <h2 class="section-title reveal"><span>05.</span> Hành trình</h2>
       <div class="timeline" id="timeline"></div>
     </section>
 
     <!-- LIÊN HỆ -->
     <section id="contact" class="section">
-      <h2 class="section-title reveal"><span>05.</span> Liên hệ</h2>
+      <h2 class="section-title reveal"><span>06.</span> Liên hệ</h2>
       <div class="contact-grid">
         <div class="reveal">
           <div class="contact-info glass" data-tilt>
@@ -139,6 +153,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="ai.js"></script>
   <script src="intro.js"></script>
 </body>
 </html>
