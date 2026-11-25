@@ -19,7 +19,7 @@ const AI_TOOLS = [
   { name: "Gemini", by: "Google", cat: "chat", icon: "✨", hue: 215, hot: true, url: "https://gemini.google.com", desc: "Trợ lý AI đa năng của Google: hỏi đáp, viết bài, phân tích ảnh, tóm tắt tài liệu, tích hợp Gmail, Docs, YouTube." },
   { name: "ChatGPT", by: "OpenAI", cat: "chat", icon: "🧠", hue: 160, url: "https://chatgpt.com", desc: "Chatbot AI nổi tiếng nhất thế giới, giỏi viết lách, giải thích kiến thức, lên ý tưởng và hỗ trợ code." },
   { name: "Claude", by: "Anthropic", cat: "chat", icon: "🪶", hue: 25, url: "https://claude.ai", desc: "AI trò chuyện mạnh về suy luận, viết văn tự nhiên, đọc tài liệu dài và lập trình." },
-  { name: "Microsoft Copilot", by: "Microsoft", cat: "chat", icon: "🪁", hue: 195, url: "https://copilot.microsoft.com", desc: "Trợ lý AI của Microsoft, tích hợp Windows, Edge và bộ Office (Word, Excel, PowerPoint)." },
+  { name: "Microsoft Copilot", by: "Microsoft", cat: "chat", icon: "🪁", hue: 195, url: "https://copilot.com", desc: "Trợ lý AI của Microsoft, tích hợp Windows, Edge và bộ Office (Word, Excel, PowerPoint)." },
   { name: "Grok", by: "xAI", cat: "chat", icon: "⚡", hue: 0, url: "https://grok.com", desc: "Chatbot AI của xAI, cập nhật tin tức nhanh từ mạng xã hội X." },
   { name: "DeepSeek", by: "DeepSeek", cat: "chat", icon: "🐋", hue: 225, url: "https://chat.deepseek.com", desc: "AI mã nguồn mở đến từ Trung Quốc, mạnh về toán học, suy luận và lập trình." },
   { name: "Meta AI", by: "Meta", cat: "chat", icon: "♾️", hue: 205, url: "https://www.meta.ai", desc: "Trợ lý AI tích hợp trong Facebook, Messenger, Instagram và WhatsApp." },
@@ -45,8 +45,8 @@ const AI_TOOLS = [
   // 🎬 Tạo video
   { name: "Veo", by: "Google DeepMind", cat: "video", icon: "🎥", hue: 210, hot: true, url: "https://deepmind.google/models/veo/", desc: "Mô hình tạo video của Google, tạo cảnh quay chân thực kèm âm thanh từ mô tả." },
   { name: "Sora", by: "OpenAI", cat: "video", icon: "🌊", hue: 200, url: "https://sora.com", desc: "Tạo video ngắn từ văn bản hoặc hình ảnh của OpenAI." },
-  { name: "Runway", by: "Runway", cat: "video", icon: "🛫", hue: 300, url: "https://runwayml.com", desc: "Bộ công cụ làm phim bằng AI: tạo video, xóa nền, chỉnh sửa chuyển động." },
-  { name: "Kling AI", by: "Kuaishou", cat: "video", icon: "🎞️", hue: 140, url: "https://klingai.com", desc: "Tạo video từ ảnh hoặc chữ với chuyển động mượt và nhân vật sống động." },
+  { name: "Runway", by: "Runway", cat: "video", icon: "🛫", hue: 300, url: "https://runway.com", desc: "Bộ công cụ làm phim bằng AI: tạo video, xóa nền, chỉnh sửa chuyển động." },
+  { name: "Kling AI", by: "Kuaishou", cat: "video", icon: "🎞️", hue: 140, url: "https://kling.ai", desc: "Tạo video từ ảnh hoặc chữ với chuyển động mượt và nhân vật sống động." },
   { name: "Pika", by: "Pika Labs", cat: "video", icon: "🐰", hue: 320, url: "https://pika.art", desc: "Tạo video vui nhộn, hiệu ứng biến hình độc đáo cho mạng xã hội." },
   { name: "CapCut", by: "ByteDance", cat: "video", icon: "✂️", hue: 0, url: "https://www.capcut.com", desc: "Chỉnh video với AI: tự tạo phụ đề, xóa nền, giọng đọc AI, hiệu ứng TikTok." },
 
@@ -64,7 +64,7 @@ const AI_TOOLS = [
 
   // 📊 Văn phòng & Thuyết trình
   { name: "Gamma", by: "Gamma", cat: "work", icon: "🖼️", hue: 260, url: "https://gamma.app", desc: "Tạo slide thuyết trình, tài liệu, trang web đẹp mắt từ một câu mô tả." },
-  { name: "Notion AI", by: "Notion", cat: "work", icon: "📝", hue: 0, url: "https://www.notion.so", desc: "Ghi chú, lập kế hoạch học tập và để AI viết, tóm tắt, sắp xếp nội dung." },
+  { name: "Notion AI", by: "Notion", cat: "work", icon: "📝", hue: 0, url: "https://www.notion.com", desc: "Ghi chú, lập kế hoạch học tập và để AI viết, tóm tắt, sắp xếp nội dung." },
   { name: "Gemini trong Google Workspace", by: "Google", cat: "work", icon: "📎", hue: 140, url: "https://workspace.google.com", desc: "Dùng Gemini ngay trong Gmail, Docs, Sheets, Slides để viết, phân tích và tạo nội dung." },
   { name: "Microsoft 365 Copilot", by: "Microsoft", cat: "work", icon: "📈", hue: 30, url: "https://www.microsoft.com/microsoft-365/copilot", desc: "AI trong Word, Excel, PowerPoint: soạn văn bản, phân tích bảng tính, làm slide." },
 ];
